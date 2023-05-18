@@ -11,7 +11,7 @@ app.use(express.json());
 
 // !MOnogDB Connection
 
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASS}@cluster0.nsyuaxc.mongodb.net/?retryWrites=true&w=majority`;
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
@@ -44,13 +44,7 @@ async function run() {
         const result = await cursor.toArray();
         res.send(result);
     })
-    // ! getting new toys from client side
-    app.post('/alltoys', async (req, res) => {
-        const newToy = req.body;
-        console.log(newToy);
-        const result = await allToyCollection.insertOne(newToy);
-        res.send(result);
-    });
+    
     //  sending data to client side filtering by email
     app.get('/alltoys/:email', async (req, res) => {
         const email = req.params.email;
@@ -58,6 +52,21 @@ async function run() {
         const query = { sellerEmail: email };
         const cursor = allToyCollection.find(query);
         const result = await cursor.toArray();
+        res.send(result);
+    });
+    // ! getting new toys from client side
+    app.post('/alltoys', async (req, res) => {
+        const newToy = req.body;
+        console.log(newToy);
+        const result = await allToyCollection.insertOne(newToy);
+        res.send(result);
+    });
+    // ! for deleting a toy
+    app.delete('/alltoys/:id', async (req, res) => {
+        const id = req.params.id;
+        const query = { _id: new ObjectId (id) };
+        console.log(query)
+        const result = await allToyCollection.deleteOne(query);
         res.send(result);
     });
 
