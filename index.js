@@ -43,6 +43,15 @@ async function run() {
         const result = await allToyCollection.insertOne(newToy);
         res.send(result);
     });
+    //  sending data to client side filtering by email
+    app.get('/alltoys/:email', async (req, res) => {
+        const email = req.params.email;
+        console.log(email)
+        const query = { sellerEmail: email };
+        const cursor = allToyCollection.find(query);
+        const result = await cursor.toArray();
+        res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
