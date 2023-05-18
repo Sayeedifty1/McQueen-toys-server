@@ -29,10 +29,10 @@ async function run() {
     await client.connect();
     const allToyCollection = client.db("toyCommerceDB").collection("allToys");
 
-    // getting all toys
-    //TODO: services
+    //! getting all toys
+    
     app.get('/alltoys', async (req, res) => {
-        const cursor = allToyCollection.find();
+        const cursor = allToyCollection.find().limit(20);
         const result = await cursor.toArray();
         res.send(result);
     })
