@@ -36,6 +36,13 @@ async function run() {
         const result = await cursor.toArray();
         res.send(result);
     })
+    // ! getting new toys from client side
+    app.post('/alltoys', async (req, res) => {
+        const newToy = req.body;
+        console.log(newToy);
+        const result = await allToyCollection.insertOne(newToy);
+        res.send(result);
+    });
 
     // Send a ping to confirm a successful connection
     await client.db("admin").command({ ping: 1 });
