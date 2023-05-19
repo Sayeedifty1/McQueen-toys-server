@@ -107,6 +107,19 @@ async function run() {
             const result = await allToyCollection.deleteOne(query);
             res.send(result);
         });
+        // all toys by category
+        app.get('/tabs/:category', async (req, res) => {
+            try {
+                const category = req.params.category;
+                const query = { subCategory: { $regex: category, $options: 'i' } };
+                const result = await allToyCollection.find(query).toArray();
+                res.send(result);
+            } catch (error) {
+                console.error('Error fetching toys by sub-category:', error);
+                res.status(500).json({ error: 'Failed to fetch toys by sub-category' });
+            }
+        });
+
 
         // Send a ping to confirm a successful connection
         await client.db("admin").command({ ping: 1 });
