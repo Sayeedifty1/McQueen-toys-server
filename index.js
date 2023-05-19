@@ -53,14 +53,29 @@ async function run() {
         });
 
 
-        //  sending data to client side filtering by email
+        //  sending data to client side filtering by email & sorting by price 
         app.get('/alltoys/seller/:email', async (req, res) => {
             const email = req.params.email;
-            const query = { sellerEmail: email };
-            const cursor = allToyCollection.find(query);
-            const result = await cursor.toArray();
-            res.send(result);
+            const sort = req.query.sort; // Get the sorting parameter from the query string
+
+            try {
+                const query = { sellerEmail: email };
+                const cursor = allToyCollection.find(query);
+
+                if (sort === 'asc') {
+                    cursor.sort({ price: 1 }); // Sort by price in ascending order
+                } else if (sort === 'desc') {
+                    cursor.sort({ price: -1 }); // Sort by price in descending order
+                }
+
+                const result = await cursor.toArray();
+                res.send(result);
+            } catch (error) {
+                console.error(error);
+                res.status(500).json({ error: 'Server Error' });
+            }
         });
+
         // ! getting new toys from client side
         app.post('/alltoys', async (req, res) => {
             const newToy = req.body;
