@@ -40,9 +40,17 @@ async function run() {
         //! getting all toys
 
         app.get('/alltoys', async (req, res) => {
-            const cursor = allToyCollection.find().limit(20);
+            const cursor = allToyCollection.find();
             const result = await cursor.toArray();
             res.send(result);
+        })
+        // get all toys with limit
+        app.get('/alltoys/:limit', async (req, res) => {
+            const count = req.params.limit
+            // console.log(parseInt(count))
+            const cursor = allToyCollection.find().limit(parseInt(count))
+            const result = await cursor.toArray()
+            res.send(result)
         })
         // get toy by id
         app.get('/alltoys/:id', async (req, res) => {
