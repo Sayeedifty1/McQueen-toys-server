@@ -53,7 +53,7 @@ async function run() {
             res.send(result)
         })
         // get toy by id
-        app.get('/alltoys/:id', async (req, res) => {
+        app.get('/alltoys/id/:id', async (req, res) => {
             const id = req.params.id;
             const query = { _id: new ObjectId(id) };
             const result = await allToyCollection.find(query).toArray();
@@ -100,7 +100,7 @@ async function run() {
             const updateDoc = {
                 $set: {
                     price: updatedToy.price,
-                    quantity: updatedToy.quantity,
+                    availableQuantity: updatedToy.availableQuantity,
                     description: updatedToy.description,
                 },
             };
